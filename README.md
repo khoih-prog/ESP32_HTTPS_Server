@@ -25,7 +25,8 @@ The steps to install this library depend on the IDE you are using. PlatformIO is
 The library is listed in PlatformIO's [library registry](https://platformio.org/lib/show/5887/esp32_https_server/). If you're using the IDE, search for `esp32_https_server` and install it, on the command line, just run:
 
 ```bash
-pio lib install "esp32_https_server"
+pio lib --global install https://github.com/khoih-prog/esp32_https_server.git
+
 ```
 
 New release can take one or two days before they get picked up by the library crawler which makes them available in the registry. The version numbers of [releases](https://github.com/fhessel/esp32_https_server/releases) are based on [semantic versioning](https://semver.org/).
@@ -66,6 +67,9 @@ git clone https://github.com/khoih-prog/esp32_https_server.git
 ```
 
 > **Note:** While the `master` branch should contain a running version of the library at any time, the API might already have changes towards the next major release. So for a stable setup, it is recommended to use a published release.
+
+---
+---
 
 ## Examples
 
