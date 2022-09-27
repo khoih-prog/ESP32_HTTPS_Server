@@ -14,7 +14,20 @@ Breaking changes:
 
 –
 
-## [v1.1.0](https://github.com/fhessel/esp32_https_server/releases/tag/v1.0.0)
+## [v1.1.1](https://github.com/fhessel/esp32_https_server/releases/tag/v1.1.1)
+
+New functionality:
+
+* Merge some upstream PRs
+
+- Handling of errors - like unstable network - coming via SSL fhessel#89
+- WIP: Prevent crash on WebSocket request to non-WebSocket node. fhessel#106
+- Fix infinite loop when the buffer ends with \r fhessel#123
+- Fixed memory leak in the Websocket example fhessel#157
+
+* Update examples
+
+## [v1.1.0](https://github.com/fhessel/esp32_https_server/releases/tag/v1.1.0)
 
 New functionality:
 

@@ -8,7 +8,7 @@ This repository contains an HTTPS server library that can be used with the [ESP3
 - Handling requests in callback functions that can be bound to URLs, like for example in Express or Servlets.
 - Abstraction of handling the HTTP stuff and providing a simple API for it, eg. to access parameters, headers, HTTP Basic Auth etc.
 - Using middleware functions as proxy to every request to perform central tasks like authentication or logging.
-- Make use of the built-in encryption of the ESP32 module for HTTPS.
+- Make use of the built-in encryption of the ESP32 and WT32_ETH01 modules for HTTPS.
 - Handle multiple clients in parallel (max. 3-4 TLS clients due to memory limits).
 - Usage of `Connection: keep-alive` and SSL session reuse to reduce the overhead of SSL handshakes and speed up data transfer.
 
@@ -40,15 +40,15 @@ env_default = wrover
 platform = espressif32
 board = esp32dev
 framework = arduino
-lib_deps = esp32_https_server
+lib_deps = https://github.com/khoih-prog/esp32_https_server.git@>=1.1.0
 ```
 
-If you want a specific version, you can use a notation like `lib_deps = esp32_https_server@0.3.0`. More information on this can be found in the [PlatformIO documentation](https://docs.platformio.org/en/latest/projectconf/section_env_library.html).
+If you want a specific version, you can use a notation like `lib_deps = https://github.com/khoih-prog/esp32_https_server.git@1.1.0`. More information on this can be found in the [PlatformIO documentation](https://docs.platformio.org/en/latest/projectconf/section_env_library.html).
 
 To use the current master of the library, don't add it to your `platform.ini` but go to your project's `libs` folder and run the following command to get a copy of repository:
 
 ```bash
-git clone https://github.com/fhessel/esp32_https_server.git
+git clone https://github.com/khoih-prog/esp32_https_server.git
 ```
 
 > **Note:** While the `master` branch should contain a running version of the library at any time, the API might already have changes towards the next major release. So for a stable setup, it is recommended to use a published release.
@@ -57,12 +57,12 @@ git clone https://github.com/fhessel/esp32_https_server.git
 
 You can install the library using Arduino IDE's [library manager](https://www.arduino.cc/en/Guide/Libraries). In the _Sketch_ menu, click on _Include Library_ and select _Manage Libraries..._ directly at the top of the menu. Then search for "ESP32 HTTPS Server" and click on the _Install_ button.
 
-Alternatively, you can download [a release](https://github.com/fhessel/esp32_https_server/releases) and extract it into your `Arduino/libraries` folder. Then restart your IDE.
+Alternatively, you can download [a release](https://github.com/khoih-prog/esp32_https_server/releases) and extract it into your `Arduino/libraries` folder. Then restart your IDE.
 
 If you want to use the latest `master` branch, open a command line, navigate to the libraries folder and run:
 
 ```bash
-git clone https://github.com/fhessel/esp32_https_server.git
+git clone https://github.com/khoih-prog/esp32_https_server.git
 ```
 
 > **Note:** While the `master` branch should contain a running version of the library at any time, the API might already have changes towards the next major release. So for a stable setup, it is recommended to use a published release.
@@ -72,6 +72,8 @@ git clone https://github.com/fhessel/esp32_https_server.git
 > **Note:** To run the examples (except for the _Self-Signed-Certificates_ example), you need to execute the script extras/create_cert.sh first (see [Issue #26](https://github.com/fhessel/esp32_https_server/issues/26) for Windows). This script will create a simple CA to sign certificates that are used with the examples. Some notes on the usage can be found in the extras/README.md file.
 
 You will find several examples showing how you can use the library:
+
+### For ESP32
 
 - [Static-Page](examples/Static-Page/Static-Page.ino): Short example showing how to serve some static resources with the server. You should start with this sketch and get familiar with it before having a look at the more complex examples.
 - [Parameters](examples/Parameters/Parameters.ino): Shows how you can access request parameters (the part after the question mark in the URL) or parameters in dynamic URLs (like /led/1, /led/2, ...)
@@ -85,9 +87,29 @@ You will find several examples showing how you can use the library:
 - [Self-Signed-Certificate](examples/Self-Signed-Certificate/Self-Signed-Certificate.ino): Shows how to generate a self-signed certificate on the fly on the ESP when the sketch starts. You do not need to run `create_cert.sh` to use this example.
 - [REST-API](examples/REST-API/REST-API.ino): Uses [ArduinoJSON](https://arduinojson.org/) and [SPIFFS file upload](https://github.com/me-no-dev/arduino-esp32fs-plugin) to serve a small web interface that provides a REST API.
 
-If you encounter error messages that cert.h or private\_key.h are missing when running an example, make sure to run create\_cert.sh first (see Setup Instructions).
+### For WT32_ETH01
+
+- [Static-Page](examples/WT32_ETH01/Static-Page/Static-Page.ino): Short example showing how to serve some static resources with the server. You should start with this sketch and get familiar with it before having a look at the more complex examples.
+- [Parameters](examples/WT32_ETH01/Parameters/Parameters.ino): Shows how you can access request parameters (the part after the question mark in the URL) or parameters in dynamic URLs (like /led/1, /led/2, ...)
+- [Put-Post-Echo](examples/WT32_ETH01/Put-Post-Echo/Put-Post-Echo.ino): Implements a simple echo service for PUT and POST requests that returns the request body as response body. Also shows how to differentiate between multiple HTTP methods for the same URL.
+- [HTTPS-and-HTTP](examples/WT32_ETH01/HTTPS-and-HTTP/HTTPS-and-HTTP.ino): Shows how to serve resources via HTTP and HTTPS in parallel and how to check if the user is using a secure connection during request handling
+- [Middleware](examples/WT32_ETH01/Middleware/Middleware.ino): Shows how to use the middleware API for logging. Middleware functions are defined very similar to webservers like Express.
+- [Authentication](examples/WT32_ETH01/Authentication/Authentication.ino): Implements a chain of two middleware functions to handle authentication and authorization using HTTP Basic Auth.
+- [Async-Server](examples/WT32_ETH01/Async-Server/Async-Server.ino): Like the Static-Page example, but the server runs in a separate task on the ESP32, so you do not need to call the loop() function in your main sketch.
+- [Websocket-Chat](examples/WT32_ETH01/Websocket-Chat/Websocket-Chat.ino): Provides a browser-based chat built on top of websockets. **Note:** Websockets are still under development!
+- [Parameter-Validation](examples/WT32_ETH01/Parameter-Validation/Parameter-Validation.ino): Shows how you can integrate validator functions to do formal checks on parameters in your URL.
+- [Self-Signed-Certificate](examples/WT32_ETH01/Self-Signed-Certificate/Self-Signed-Certificate.ino): Shows how to generate a self-signed certificate on the fly on the ESP when the sketch starts. You do not need to run `create_cert.sh` to use this example.
+- [REST-API](examples/WT32_ETH01/REST-API/REST-API.ino): Uses [ArduinoJSON](https://arduinojson.org/) and [SPIFFS file upload](https://github.com/me-no-dev/arduino-esp32fs-plugin) to serve a small web interface that provides a REST API.
+
+---
+---
+
+If you encounter error messages that cert.h or private\_key.h are missing when running an example, make sure to run `create_cert.sh` first (see Setup Instructions).
 
 You might also want to check out the (work-in-progress) [Documentation](https://fhessel.github.io/esp32_https_server/).
+
+---
+---
 
 ## Get Started
 
@@ -110,6 +132,9 @@ The following includes are required to be able to setup the server.
 // Easier access to the classes of the server
 using namespace httpsserver
 ```
+
+---
+
 ### Create Server Instance
 
 You can create your server instance like shown below:
@@ -136,16 +161,19 @@ SSLCert cert = SSLCert(
 HTTPSServer myServer = HTTPSServer(cert);
 ```
 
-By default, the server will listen on port 443. If you want to change that (or some other options), you can have a look at the optional parameters of the [`HTTPServer`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1HTTPServer.html) or [`HTTPSServer`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1HTTPSServer.html) constructors.
+By default, the server will listen on port `443`. If you want to change that (or some other options), you can have a look at the optional parameters of the [`HTTPServer`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1HTTPServer.html) or [`HTTPSServer`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1HTTPSServer.html) constructors.
 
 The only difference between the HTTP and HTTPS version is the certificate which you have to configure. Keep in mind that each opened connection of the TLS-enabled `HTTPSServer` requires additional 40 to 50 kB of heap memory for the TLS connection itself. This has to be considered when increasing `maxConnections`.
+
+---
 
 ### Add Resources to the Server
 
 Every _route_ (or path) that should be accessible on the server has to be configured as a so-called `ResourceNode`. Such a node links a handler function to a specific route (like `/test`) and HTTP method (like `GET`). The handler function could look like this:
 
 ```C++
-void handleRoot(HTTPRequest * req, HTTPResponse * res) {
+void handleRoot(HTTPRequest * req, HTTPResponse * res) 
+{
 	// We want to deliver an HTML page, so we set the content type
 	res->setHeader("Content-Type", "text/html");
 	// The response implements the Print interface, so you can use it just like
@@ -185,6 +213,8 @@ That's everything you need to do for a single web page on your server.
 
 Note that you can define a single [`ResourceNode`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1ResourceNode.html) via `HTTPServer::setDefaultNode()`, which will be called if no other node on the server matches. Method and route are ignored in this case. Most examples use this to define a 404-handler, which might be a good idea for most scenarios. In case no default node is specified, the server will return with a small error page if no matching route is found.
 
+---
+
 ### Start the Server
 
 A call to [`HTTPServer::start()`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1HTTPServer.html#a1b1b6bce0b52348ca5b5664cf497e039) will start the server so that it is listening on the previously specified port:
@@ -197,15 +227,21 @@ This code usually goes into your `setup()` function. You can use `HTTPServer::is
 
 By default, you need to pass control to the server explicitly. This is done by calling the [`HTTPServer::loop()`](https://fhessel.github.io/esp32_https_server/classhttpsserver_1_1HTTPServer.html#af8f68f5ff6ad101827bcc52217249fe2) function, which you usually will put into your Arduino sketch's `loop()` function. Once called, the server will first check for incoming connection (up to the maximum connection count that has been defined in the constructor), and then handle every open connection if it has new data on the socket. So your request handler functions will be called during the call to `loop()`. Note that if one of your handler functions is blocking, it will block all other connections as well.
 
+---
+
 ### Running the Server asynchronously
 
 If you want to have the server running in the background (and not calling `loop()` by yourself every few milliseconds), you can make use of the ESP32's task feature and put the whole server in a separate task.
 
 See the [Async-Server example](https://github.com/fhessel/esp32_https_server/tree/master/examples/Async-Server) to see how this can be done.
 
+---
+
 ## Advanced Configuration
 
 This section covers some advanced configuration options that allow you, for example, to customize the build process, but which might require more advanced programming skills and a more sophisticated IDE that just the default Arduino IDE.
+
+---
 
 ### Saving Space by Reducing Functionality
 
@@ -219,6 +255,8 @@ The following flags are currently available:
 
 Setting these flags requires a build environment that gives you some control of the compiler, as libraries are usually compiled separately, so just doing a `#define HTTPS_SOMETHING` in your sketch will not work.
 
+---
+
 **Example: Configuration with PlatformIO**
 
 To set these flags in PlatformIO, you can modify your `platformio.ini`. To disable for example the self-signed-certificates part of the library, the file could look like this:
@@ -228,7 +266,7 @@ To set these flags in PlatformIO, you can modify your `platformio.ini`. To disab
 platform = espressif32
 board = esp32dev
 framework = arduino
-lib_deps = esp32_https_server
+lib_deps = https://github.com/khoih-prog/esp32_https_server.git@>=1.1.0
 build_flags =
   -DHTTPS_DISABLE_SELFSIGNING
 ```
@@ -269,7 +307,7 @@ To set these flags in PlatformIO, you can modify your `platformio.ini`. The foll
 platform = espressif32
 board = esp32dev
 framework = arduino
-lib_deps = esp32_https_server
+lib_deps = https://github.com/khoih-prog/esp32_https_server.git@>=1.1.0
 build_flags =
   -DHTTPS_LOGLEVEL=2
   -DHTTPS_LOGTIMESTAMP

@@ -5,10 +5,10 @@
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/fhessel/esp32_https_server.git"
+    "url": "https://github.com/khoih-prog/esp32_https_server.git"
   },
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "frameworks": "arduino",
   "platforms": ["espressif32"]
 }
