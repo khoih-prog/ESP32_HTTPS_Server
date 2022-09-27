@@ -26,7 +26,12 @@ The library is listed in PlatformIO's [library registry](https://platformio.org/
 
 ```bash
 pio lib --global install https://github.com/khoih-prog/esp32_https_server.git
+```
 
+or for new PIO version
+
+```bash
+pio pkg install --global -l https://github.com/khoih-prog/esp32_https_server.git
 ```
 
 New release can take one or two days before they get picked up by the library crawler which makes them available in the registry. The version numbers of [releases](https://github.com/fhessel/esp32_https_server/releases) are based on [semantic versioning](https://semver.org/).
